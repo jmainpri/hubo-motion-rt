@@ -34,6 +34,18 @@ enum effector_t {
 };
 
 /**
+ * \brief Current stance. The first four are set for each
+ * timestep of the zmp trajectory. The last three are used
+ * to determine which atomic trajectory to used
+*/
+enum stance_t {
+  DOUBLE_LEFT  = 0, //!< double support stance, left dominant
+  DOUBLE_RIGHT = 1, //!< double support stance, right dominant
+  SINGLE_LEFT  = 2, //!< single support stance, left dominant
+  SINGLE_RIGHT = 3, //!< single support stance, right dominant
+};
+
+/**
  * \brief Different stance types for atomic trajectories, used
  * for all walk types.
 */
