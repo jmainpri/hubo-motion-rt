@@ -75,6 +75,7 @@ link_libraries(huboctrl)
 
 # Install Libraries
 INSTALL(TARGETS daemonizer
+        huboctrl
         DESTINATION ${LIBRARY_INSTALL_PATH})
 
 # Install Headers
