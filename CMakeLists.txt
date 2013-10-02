@@ -57,8 +57,8 @@ add_library(daemonizer SHARED ${daemonizer_source})
 add_executable(control-daemon ${control_daemon_source})
 target_link_libraries(control-daemon m rt ach huboparams daemonizer)
 
-#add_library(huboctrl SHARED ${hubo_control_source})
-#link_libraries(huboctrl)
+add_library(huboctrl SHARED ${hubo_control_source})
+link_libraries(huboctrl)
 
 #add_library(drchubokin SHARED ${drc_hubo_kin_source})
 #link_libraries(drchubokin)
