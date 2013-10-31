@@ -540,6 +540,26 @@ ctrl_flag_t Hubo_Control::setJointTraj( int joint, double radians, double vel, b
     return SUCCESS;
 }
 
+ctrl_flag_t Hubo_Control::setCompliance( int joint, bool enable_compliance )
+{
+    if( joint < HUBO_JOINT_COUNT )
+    {
+        switch( ctrlMap[joint] )
+        {
+        case CtrlRA: // Right Arm
+            H_Arm_Ctrl[RIGHT].joint[localMap[joint]].compliance = enable_compliance;
+            break;
+        case CtrlLA: // Left Arm
+            H_Arm_Ctrl[LEFT].joint[localMap[joint]].compliance = enable_compliance;
+            break;
+        }
+    }
+    else
+        return JOINT_OOB;
+
+    return SUCCESS;
+}
+
 ctrl_flag_t Hubo_Control::setJointTraj( int joint, double radians, bool send )
 {
     if( joint < HUBO_JOINT_COUNT )
@@ -1719,7 +1739,7 @@ double Hubo_Control::getRotVelX() { return H_State.imu[IMU].w_x; }
 double Hubo_Control::getRotVelY() { return H_State.imu[IMU].w_y; }
 
 
-ctrl_flag_t Hubo_Control::passJointAngle(int joint, double radians, bool send)
+ctrl_flag_t Hubo_Control::passJointAngle(int joint, double radians, bool send, bool comply)
 {
 
     if( joint < HUBO_JOINT_COUNT )
@@ -1730,10 +1750,12 @@ ctrl_flag_t Hubo_Control::passJointAngle(int joint, double radians, bool send)
                 H_Arm_Ctrl[RIGHT].joint[localMap[joint]].position = radians;
                 H_Arm_Ctrl[RIGHT].joint[localMap[joint]].mode = CTRL_PASS;
                 H_Arm_Ctrl[RIGHT].active=1; ctrlOn[CtrlRA] = true; break;
+                H_Arm_Ctrl[RIGHT].joint[localMap[joint]].compliance = comply;
             case CtrlLA: // Left Arm
                 H_Arm_Ctrl[LEFT].joint[localMap[joint]].position = radians;
                 H_Arm_Ctrl[LEFT].joint[localMap[joint]].mode = CTRL_PASS;
                 H_Arm_Ctrl[LEFT].active=1; ctrlOn[CtrlLA] = true; break;
+                H_Arm_Ctrl[LEFT].joint[localMap[joint]].compliance = comply;
             case CtrlRL: // Right Leg
                 H_Leg_Ctrl[RIGHT].joint[localMap[joint]].position = radians;
                 H_Leg_Ctrl[RIGHT].joint[localMap[joint]].mode = CTRL_PASS;

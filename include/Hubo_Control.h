@@ -188,6 +188,11 @@ public:
      * and acceleration settings.
     */
     ctrl_flag_t setJointTraj( int joint, double radians, bool send=false );
+
+    /**
+     * Sets the compliance of a given joint
+    */
+    ctrl_flag_t setCompliance( int joint, bool enable_compliance );
     /**
      * Sets joint angle for the joint to specified radian value. If send is true then 
      * the command will be sent to the motor board immediately, otherwise it won't.
@@ -651,7 +656,7 @@ public:
      * 
      * \b NOTE: Use of this mode is \em strongly discouraged.
     */
-    ctrl_flag_t passJointAngle( int joint, double radians, bool send=false );
+    ctrl_flag_t passJointAngle( int joint, double radians, bool send=false, bool comply=false);
 
     // ~~~*** State Readings ***~~~ //
 

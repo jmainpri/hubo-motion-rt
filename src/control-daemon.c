@@ -339,6 +339,9 @@ void controlLoop()
 
             for(int jnt=0; jnt<HUBO_JOINT_COUNT; jnt++)
             {
+                // Add compliance settings
+                H_ref.comply[jnt] = ctrl.joint[jnt].compliance;
+
                 err = H_ref.ref[jnt] - H_state.joint[jnt].pos;
 
                 if( ctrl.joint[jnt].mode == CTRL_PASS )

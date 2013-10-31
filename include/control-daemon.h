@@ -85,7 +85,7 @@ typedef struct hubo_joint_control {
     double speed;
     double velocity;
     double acceleration;
-
+    uint8_t compliance;
     double correctness;
 // FIXME: Add minimum accel parameter
 
