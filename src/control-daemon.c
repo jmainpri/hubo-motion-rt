@@ -343,7 +343,13 @@ void controlLoop()
                 H_ref.comply[jnt] = ctrl.joint[jnt].compliance;
 
                 if( jnt == RKN || jnt == LKN )
+                {
                     fprintf(stdout, "Compliance[%d] : %d\n", jnt, H_ref.comply[jnt] );
+                }
+                if( H_ref.comply[jnt] == 1 )
+                {
+                    fprintf(stdout, "Compliance[%d] : %d\n", jnt, H_ref.comply[jnt] );
+                }
 
                 err = H_ref.ref[jnt] - H_state.joint[jnt].pos;
 
