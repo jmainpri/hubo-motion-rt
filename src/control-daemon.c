@@ -342,6 +342,9 @@ void controlLoop()
                 // Add compliance settings
                 H_ref.comply[jnt] = ctrl.joint[jnt].compliance;
 
+                if( jnt == RKN || jnt == LKN )
+                    fprintf(stdout, "Compliance[%d] : %d\n", jnt, H_ref.comply[jnt] );
+
                 err = H_ref.ref[jnt] - H_state.joint[jnt].pos;
 
                 if( ctrl.joint[jnt].mode == CTRL_PASS )
@@ -434,12 +437,12 @@ void controlLoop()
                             H_ref.ref[jnt] += dr[jnt];
                             V[jnt] = dr[jnt]/dt;
 
-			     // TODO fix for fingers (remove)
-			    if( 32 <= jnt && jnt <= 41 ) {
-			      H_ref.ref[jnt] = ctrl.joint[jnt].position;
-			      V[jnt] = (ctrl.joint[jnt].position-H_ref.ref[jnt])/dt;
-			      fprintf( stderr, "jnt[%d] = %f\n",jnt,ctrl.joint[jnt].position);
-			    }
+                           // TODO fix for fingers (remove)
+                           if( 32 <= jnt && jnt <= 41 ) {
+                                H_ref.ref[jnt] = ctrl.joint[jnt].position;
+                                V[jnt] = (ctrl.joint[jnt].position-H_ref.ref[jnt])/dt;
+                                fprintf( stderr, "jnt[%d] = %f\n",jnt,ctrl.joint[jnt].position);
+                           }
                         }
                         else if( ctrl.joint[jnt].mode == CTRL_POS )
                         {
