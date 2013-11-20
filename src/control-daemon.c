@@ -436,7 +436,7 @@ void controlLoop()
 #ifdef DEBUG_KNEE
                             if( jnt == RKN || jnt == LKN )
                             {
-                                fprintf( stdout, "traj, %d, %f, %f\n", jnt, ctrl.joint[jnt].position, V[jnt]);
+                                fprintf( stdout, "traj, %d, %f, %f, %f\n", jnt, ctrl.joint[jnt].position, H_ref.ref[jnt], V[jnt]);
                             }
 #endif
 
