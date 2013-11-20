@@ -430,13 +430,15 @@ void controlLoop()
                             V[jnt] = (1-ctrl.joint[jnt].correctness)*V[jnt]; // specifies the amout of velocity
                             dr[jnt] = V[jnt]*dt + ctrl.joint[jnt].correctness*(ctrl.joint[jnt].position - H_ref.ref[jnt]);
 
+                            double jnt_state = H_ref.ref[jnt];
+
                             H_ref.ref[jnt] += dr[jnt];
                             V[jnt] = dr[jnt]/dt;
 
 #ifdef DEBUG_KNEE
                             if( jnt == RKN || jnt == LKN )
                             {
-                                fprintf( stdout, "traj, %d, %f, %f, %f\n", jnt, ctrl.joint[jnt].position, H_ref.ref[jnt], V[jnt]);
+                                fprintf( stdout, "traj, %d, %f, %f, %f\n", jnt, ctrl.joint[jnt].position, jnt_state, V[jnt]);
                             }
 #endif
 
