@@ -51,6 +51,7 @@ ach_channel_t chan_ctrl_state;
 
 static char *ctrlFileLocation = "/etc/hubo-ach/control.table";
 
+#define DEBUG_KNEE 1
 
 void controlLoop();
 int setCtrlDefaults( struct hubo_control *ctrl );
@@ -395,6 +396,8 @@ void controlLoop()
                                 H_ref.ref[jnt] += dr[jnt];
 */
                             H_ref.ref[jnt] += dr[jnt];
+
+                            fprintf(stdout, "Pass:%f\t", ctrl.joint[jnt].position);
                         }
                         else if( ctrl.joint[jnt].mode == CTRL_TRAJ )
                         {
@@ -423,7 +426,6 @@ void controlLoop()
 //                            else if( dV[jnt] < -fabs(ctrl.joint[jnt].acceleration*dt) )
 //                                dV[jnt] = -fabs(ctrl.joint[jnt].acceleration*dt);
 
-
                             V[jnt] = V0[jnt] + dV[jnt]; // Step velocity forward
                             V[jnt] = (1-ctrl.joint[jnt].correctness)*V[jnt]; // specifies the amout of velocity
                             dr[jnt] = V[jnt]*dt + ctrl.joint[jnt].correctness*(ctrl.joint[jnt].position - H_ref.ref[jnt]);
@@ -431,12 +433,19 @@ void controlLoop()
                             H_ref.ref[jnt] += dr[jnt];
                             V[jnt] = dr[jnt]/dt;
 
-			     // TODO fix for fingers (remove)
-			    if( 32 <= jnt && jnt <= 41 ) {
-			      H_ref.ref[jnt] = ctrl.joint[jnt].position;
-			      V[jnt] = (ctrl.joint[jnt].position-H_ref.ref[jnt])/dt;
-			      fprintf( stderr, "jnt[%d] = %f\n",jnt,ctrl.joint[jnt].position);
-			    }
+#ifdef DEBUG_KNEE
+                            if( jnt == RKN || jnt == LKN )
+                            {
+                                fprintf( stdout, "traj, %d, %f, %f\n", jnt, ctrl.joint[jnt].position, V[jnt]);
+                            }
+#endif
+
+			                // TODO fix for fingers (remove)
+			                if( 32 <= jnt && jnt <= 41 ) {
+			                  H_ref.ref[jnt] = ctrl.joint[jnt].position;
+			                  V[jnt] = (ctrl.joint[jnt].position-H_ref.ref[jnt])/dt;
+			                  fprintf( stderr, "jnt[%d] = %f\n", jnt, ctrl.joint[jnt].position );
+			                }
                         }
                         else if( ctrl.joint[jnt].mode == CTRL_POS )
                         {
@@ -538,6 +547,10 @@ void controlLoop()
             if(ctrl.active == 1 && C_state.paused==0)
             {
                 presult = ach_put( &chan_hubo_ref, &H_ref, sizeof(H_ref) );
+#ifdef DEBUG_KNEE
+                fprintf(stdout, "achput, %d, %f\n", RKN, H_ref.ref[RKN] );
+                fprintf(stdout, "achput, %d, %f\n", LKN, H_ref.ref[LKN] );
+#endif
                 if(presult != ACH_OK)
                     fprintf(stderr, "Error sending ref command! (%d) %s\n",
                         presult, ach_result_to_string(presult));

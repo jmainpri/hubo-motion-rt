@@ -34,15 +34,34 @@
  *   POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #include <Hubo_Control.h>
 
 extern "C" {
 #include "daemonizer.h"
 }
 
+#define DEBUG_KNEE 1
+
+#ifdef DEBUG_KNEE
+#include <sys/time.h>
+#include <fstream>
+#include <sstream>
+#include <iomanip>
+std::ofstream file_;
+#endif
+
 Hubo_Control::Hubo_Control(bool live)
 {
+#ifdef DEBUG_KNEE
+    timeval tim;
+    gettimeofday(&tim, NULL);
+    char buffer [80];
+    strftime(buffer, 80, "%Y-%m-%d_%H:%M:%S", localtime(&tim.tv_sec));
+
+    std::string log_filename( std::string(getenv("HOME") ) + "/hubo_control_" + std::string(buffer) + ".log" );
+    file_.open( log_filename.c_str(), std::ios::out );
+#endif
+
     controlInit(live);
 }
 
@@ -587,6 +606,12 @@ ctrl_flag_t Hubo_Control::setJointAngle(int joint, double radians, bool send)
 {
     if( joint < HUBO_JOINT_COUNT )
     {
+#ifdef DEBUG_KNEE
+        if( joint == RKN || joint == LKN )
+        {
+            file_ << "setJointAngle, " << joint << "," << radians << std::endl;
+        }
+#endif
         switch( ctrlMap[joint] )
         {
             case CtrlRA: // Right Arm
