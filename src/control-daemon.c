@@ -340,7 +340,8 @@ void controlLoop()
 
             for(int jnt=0; jnt<HUBO_JOINT_COUNT; jnt++)
             {
-                err = H_ref.ref[jnt] - H_state.joint[jnt].pos;
+                // err = H_ref.ref[jnt] - H_state.joint[jnt].pos;
+                err = H_ref.ref[jnt] - H_state.joint[jnt].ref;
 
                 if( ctrl.joint[jnt].mode == CTRL_PASS )
                 {
