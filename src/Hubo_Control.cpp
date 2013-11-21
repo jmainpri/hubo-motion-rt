@@ -40,7 +40,7 @@ extern "C" {
 #include "daemonizer.h"
 }
 
-#define DEBUG_KNEE 1
+//#define DEBUG_KNEE 1
 
 #ifdef DEBUG_KNEE
 #include <sys/time.h>

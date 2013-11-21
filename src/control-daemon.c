@@ -51,7 +51,7 @@ ach_channel_t chan_ctrl_state;
 
 static char *ctrlFileLocation = "/etc/hubo-ach/control.table";
 
-#define DEBUG_KNEE 1
+// #define DEBUG_KNEE 1
 
 void controlLoop();
 int setCtrlDefaults( struct hubo_control *ctrl );
