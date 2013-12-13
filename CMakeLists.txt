@@ -85,6 +85,7 @@ INSTALL(FILES include/Hubo_Control.h
               include/manip.h
               include/hubo-zmp.h
               include/DrcHuboKin.h
+              include/daemonizer.h
         DESTINATION /usr/local/include/)
 
 # Install Tables
